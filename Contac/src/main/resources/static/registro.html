@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contac - Registro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .logo h1 {
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        .logo h1 span:first-child {
+            color: #00ff00;
+        }
+
+        .logo h1 span:last-child {
+            color: #fff;
+        }
+
+        .register-box {
+            background: rgba(0, 255, 0, 0.05);
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .register-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #00ff00;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00ff00;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+
+        .form-group input::placeholder {
+            color: #666;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .error-message, .success-message {
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error-message {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            color: #ff6b6b;
+        }
+
+        .success-message {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+        }
+
+        .error-message.show, .success-message.show {
+            display: block;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 15px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-register:hover {
+            background: #00cc00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-register:active {
+            transform: translateY(0);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #00ff00;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #00ff00;
+            margin-top: 15px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="register-container">
+    <div class="logo">
+        <h1><span>C</span><span>ontac</span></h1>
+    </div>
+
+    <div class="register-box">
+        <h2 class="register-title">Crear Cuenta</h2>
+
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="username">Usuario</label>
+                <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Elige un nombre de usuario"
+                        required
+                        minlength="4"
+                        maxlength="50"
+                >
+                <div class="form-hint">Mínimo 4 caracteres, máximo 50</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Crea una contraseña segura"
+                        required
+                        minlength="6"
+                >
+                <div class="form-hint">Mínimo 6 caracteres</div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirmar Contraseña</label>
+                <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Repite tu contraseña"
+                        required
+                >
+            </div>
+
+            <button type="submit" class="btn-register">Registrarse</button>
+
+            <div id="loading" class="loading">
+                Creando cuenta...
+            </div>
+        </form>
+
+        <div class="login-link">
+            ¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    const API_URL = 'http://localhost:8080/api';
+
+
+    //const API_URL = 'https://ungratifiable-unmudded-neida.ngrok-free.dev/api';
+
+    const registerForm = document.getElementById('registerForm');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    const loading = document.getElementById('loading');
+
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        errorMessage.classList.remove('show');
+        successMessage.classList.remove('show');
+
+        if (password !== confirmPassword) {
+            errorMessage.textContent = 'Las contraseñas no coinciden';
+            errorMessage.classList.add('show');
+            return;
+        }
+
+        loading.classList.add('show');
+
+        try {
+            const response = await fetch(`${API_URL}/auth/registro`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                successMessage.textContent = 'Cuenta creada exitosamente. Redirigiendo al login...';
+                successMessage.classList.add('show');
+                registerForm.reset();
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            } else {
+                throw new Error(data.error || 'Error al crear la cuenta');
+            }
+        } catch (error) {
+            errorMessage.textContent = error.message;
+            errorMessage.classList.add('show');
+        } finally {
+            loading.classList.remove('show');
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contac - Ver Tema</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(0, 255, 0, 0.05);
+            border-bottom: 2px solid #00ff00;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .logo span:first-child {
+            color: #00ff00;
+        }
+
+        .btn-back {
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-back:hover {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .tema-actions {
+            margin: 20px 0;
+            padding: 15px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-edit {
+            padding: 12px 25px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-edit:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-edit:active {
+            transform: translateY(0);
+        }
+
+
+
+        .container {
+            max-width: 1400px; /* más ancho */
+            margin: 10px auto;
+            padding: 0 10px;
+            display: grid;
+            grid-template-columns: 2fr 480px; /* tema más ancho, comentarios más angosto */
+            gap: 20px;
+        }
+
+        .tema-section {
+            background: rgba(0, 255, 0, 0.05);
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .tema-header {
+            margin-bottom: 25px;
+        }
+
+        .tema-title {
+            font-size: 32px;
+            font-weight: 500;
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+
+        .tema-meta {
+            display: flex;
+            gap: 20px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .tema-media {
+            width: 100%;
+            aspect-ratio: 16 / 9; /* mantiene proporción horizontal (YouTube style) */
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            background: #111;
+        }
+        .tema-media iframe,
+        .tema-media video,
+        .tema-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .tema-description {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #ccc;
+            white-space: pre-wrap;
+        }
+
+        .comentarios-section {
+            background: rgba(0, 255, 0, 0.05);
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            padding: 30px;
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
+        }
+
+        .comentarios-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #00ff00;
+            margin-bottom: 25px;
+        }
+
+        .comentario-form {
+            margin-bottom: 30px;
+        }
+
+        .comentario-form textarea {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 15px;
+            font-family: inherit;
+            min-height: 100px;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+
+        .comentario-form textarea:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+
+        .comentario-form textarea::placeholder {
+            color: #666;
+        }
+
+        .btn-comentar {
+            width: 100%;
+            padding: 12px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-comentar:hover {
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .comentarios-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .comentario {
+            background: rgba(0, 255, 0, 0.03);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .comentario-text {
+            color: #fff;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+
+        .comentario-fecha {
+            color: #666;
+            font-size: 13px;
+            font-style: italic;
+        }
+
+        .no-comentarios {
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #00ff00;
+            padding: 40px;
+        }
+
+        .error-message {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .comentarios-section {
+                max-height: none;
+            }
+        }
+    </style>
+
+
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo" onclick="window.location.href='index.html'">
+        <span>C</span><span>ontac</span>
+    </div>
+
+    <div class="nav-actions">
+        <a href="index.html" class="btn-back">← Volver</a>
+        <button id="btnEdit" class="btn-edit" style="display: none;">✏️ Editar Tema</button>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="tema-section">
+        <div id="loadingTema" class="loading">Cargando tema...</div>
+        <div id="temaContent" style="display: none;">
+            <div class="tema-header">
+                <h1 class="tema-title" id="temaTitulo"></h1>
+                <div class="tema-meta">
+                    <span id="temaUsuario"></span>
+                    <span id="temaFecha"></span>
+                    <span id="temaTipo"></span>
+                </div>
+            </div>
+
+            <div class="tema-media" id="temaMedia"></div>
+
+            <div class="tema-description" id="temaDescripcion"></div>
+        </div>
+    </div>
+
+    <div class="comentarios-section">
+        <h2 class="comentarios-title">¿Qué opinas?</h2>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <div class="comentario-form">
+                <textarea
+                        id="nuevoComentario"
+                        placeholder="Comenta..."
+                        maxlength="5000"
+                ></textarea>
+            <button class="btn-comentar" onclick="agregarComentario()">
+                Publicar Comentario
+            </button>
+        </div>
+
+        <div id="loadingComentarios" class="loading" style="display: none;">
+            Cargando comentarios...
+        </div>
+
+        <div id="comentariosList" class="comentarios-list"></div>
+
+        <div id="noComentarios" class="no-comentarios" style="display: none;">
+            Aún no hay comentarios. ¡Sé el primero!
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    const API_URL = 'http://localhost:8080/api';
+
+
+    //const API_URL = 'https://ungratifiable-unmudded-neida.ngrok-free.dev/api';
+
+
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const idTema = urlParams.get('id');
+
+    // Obtener datos del usuario logueado
+    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
+
+    if (!idTema) {
+        window.location.href = 'index.html';
+    }
+
+    async function cargarTema() {
+        const loadingTema = document.getElementById('loadingTema');
+        const temaContent = document.getElementById('temaContent');
+
+        try {
+            const response = await fetch(`${API_URL}/temas/ver/${idTema}`);
+            const tema = await response.json();
+
+            if (!response.ok) {
+                throw new Error('Tema no encontrado');
+            }
+
+            document.getElementById('temaTitulo').textContent = tema.titulo;
+            document.getElementById('temaUsuario').textContent = tema.usuarioCreador || 'Anónimo';
+            document.getElementById('temaFecha').textContent = new Date(tema.fechaCreacion).toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('temaTipo').textContent = tema.tipoContenido;
+            document.getElementById('temaDescripcion').textContent = tema.descripcion;
+
+            const mediaContainer = document.getElementById('temaMedia');
+
+            // Determinar la fuente del contenido
+            let mediaUrl;
+            if (tema.urlContenido && tema.urlContenido.trim() !== '') {
+                mediaUrl = tema.urlContenido;
+            } else {
+                mediaUrl = `${API_URL}/temas/archivo/${tema.idTema}`;
+            }
+
+            // Para YouTube, usar iframe embed
+            if (tema.tipoContenido === 'VIDEO' && tema.urlContenido && tema.urlContenido.includes('youtube.com')) {
+                const videoId = extraerYouTubeId(tema.urlContenido);
+                mediaContainer.innerHTML = `
+                    <iframe
+                        src="https://www.youtube.com/embed/${videoId}"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        style="width: 100%; height: 500px;">
+                    </iframe>
+                `;
+            } else if (tema.tipoContenido === 'VIDEO') {
+                mediaContainer.innerHTML = `<video src="${mediaUrl}" controls style="width: 100%;"></video>`;
+            } else {
+                mediaContainer.innerHTML = `<img src="${mediaUrl}" alt="${tema.titulo}" style="width: 100%;" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23111%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%2300ff00%22 font-size=%2220%22>Error al cargar imagen</text></svg>'">`;
+            }
+
+            // ===== AGREGAR BOTÓN DE EDITAR AQUÍ =====
+            mostrarBotonEditar(tema);
+            // ========================================
+
+            loadingTema.style.display = 'none';
+            temaContent.style.display = 'block';
+
+            cargarComentarios();
+        } catch (error) {
+            loadingTema.textContent = 'Error al cargar el tema';
+            console.error('Error:', error);
+        }
+    }
+
+    // ===== NUEVA FUNCIÓN PARA MOSTRAR BOTÓN EDITAR =====
+   function mostrarBotonEditar(tema) {
+    if (username && tema.usuarioCreador === username) {
+        const editButton = document.getElementById('btnEdit');
+        editButton.style.display = 'inline-flex';
+        editButton.onclick = () => window.location.href = `editar-tema.html?id=${tema.idTema}`;
+     }
+    }
+
+    // ====================================================
+
+    async function cargarComentarios() {
+        const loadingComentarios = document.getElementById('loadingComentarios');
+        const comentariosList = document.getElementById('comentariosList');
+        const noComentarios = document.getElementById('noComentarios');
+
+        loadingComentarios.style.display = 'block';
+        comentariosList.innerHTML = '';
+        noComentarios.style.display = 'none';
+
+        try {
+            const response = await fetch(`${API_URL}/comentarios/tema/${idTema}`);
+            const comentarios = await response.json();
+
+            loadingComentarios.style.display = 'none';
+
+            if (comentarios.length === 0) {
+                noComentarios.style.display = 'block';
+                return;
+            }
+
+            comentarios.forEach(comentario => {
+                const comentarioDiv = document.createElement('div');
+                comentarioDiv.className = 'comentario';
+
+                const fecha = new Date(comentario.fechaComentario).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                comentarioDiv.innerHTML = `
+                    <div class="comentario-text">${comentario.comentario}</div>
+                    <div class="comentario-fecha">${fecha}</div>
+                `;
+
+                comentariosList.appendChild(comentarioDiv);
+            });
+        } catch (error) {
+            loadingComentarios.style.display = 'none';
+            console.error('Error al cargar comentarios:', error);
+        }
+    }
+
+    async function agregarComentario() {
+        const comentarioTexto = document.getElementById('nuevoComentario').value.trim();
+        const errorMessage = document.getElementById('errorMessage');
+
+        errorMessage.classList.remove('show');
+
+        if (!comentarioTexto) {
+            errorMessage.textContent = 'El comentario no puede estar vacío';
+            errorMessage.classList.add('show');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/comentarios`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    comentario: comentarioTexto,
+                    idTema: parseInt(idTema)
+                })
+            });
+
+            if (response.ok) {
+                document.getElementById('nuevoComentario').value = '';
+                cargarComentarios();
+                errorMessage.classList.remove('show');
+            } else {
+                const data = await response.json();
+                throw new Error(data.error || 'Error al publicar comentario');
+            }
+        } catch (error) {
+            errorMessage.textContent = error.message;
+            errorMessage.classList.add('show');
+        }
+    }
+
+    // Permitir enviar comentario con Enter+Ctrl
+    document.getElementById('nuevoComentario').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.ctrlKey) {
+            agregarComentario();
+        }
+    });
+
+    function extraerYouTubeId(url) {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    cargarTema();
+</script>
+
+</body>
+</html>

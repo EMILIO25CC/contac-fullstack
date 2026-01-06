@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contac - Temas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(0, 255, 0, 0.05);
+            border-bottom: 2px solid #00ff00;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .logo span:first-child {
+            color: #00ff00;
+        }
+
+        .nav-search {
+            flex: 1;
+            max-width: 600px;
+            margin: 0 40px;
+            position: relative;
+        }
+
+        .nav-search input {
+            width: 100%;
+            padding: 12px 20px;
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .nav-search input::placeholder {
+            color: #666;
+        }
+
+        .nav-search input:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #00ff00;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-logout {
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .btn-new-tema {
+            padding: 12px 25px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-new-tema:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .header-section {
+            margin-bottom: 40px;
+        }
+
+        .header-section h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .temas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .tema-card {
+            background: rgba(0, 255, 0, 0.05);
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .tema-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 0, 0.2);
+        }
+
+        .tema-media {
+            width: 100%;
+            height: 250px;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tema-media img, .tema-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-icon {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 255, 0, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .tema-content {
+            padding: 20px;
+        }
+
+        .tema-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #00ff00;
+        }
+
+        .tema-info {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .tema-description {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #ccc;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .tema-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .no-temas {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-temas h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #00ff00;
+            font-size: 18px;
+        }
+
+        #loginToast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #00ff00;
+        color: #000;
+        padding: 15px 25px;
+        border-radius: 10px;
+        font-weight: 600;
+        opacity: 0;
+        transition: opacity 0.5s;
+        z-index: 1000;
+    }
+    #loginToast.show {
+        opacity: 1;
+    }
+
+    .search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #00ff00;
+    pointer-events: none;
+    transition: color 0.3s;
+    }
+
+    .nav-search input:focus + .search-icon {
+        color: #fff;
+    }
+
+
+
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">
+        <span>C</span><span>ontac</span>
+    </div>
+
+    <div class="nav-search">
+        <input
+                type="text"
+                id="searchInput"
+                placeholder="Busca un tema..."
+        >
+        <span class="search-icon">🔍</span>
+    </div>
+
+
+    <div class="nav-links">
+        <a href="index.html">Temas</a>
+        <a href="#">Tecnologías</a>
+        <a href="#">Funciones</a>
+    </div>
+
+    <div id="loginToast"></div>
+
+
+    <div class="user-info">
+        <span id="usernameDisplay"></span>
+        <button id="btnLogin" class="btn-logout" onclick="goLogin()">Iniciar sesión</button>
+        <button id="btnLogout" class="btn-logout" style="display:none;" onclick="logout()">Salir</button>
+    </div>
+
+</nav>
+
+<div class="container">
+    <div class="header-section">
+        <h2>Temas:</h2>
+        <a href="crear-tema.html" id="btnCrearTema" class="btn-new-tema">+ Crear Nuevo Tema</a>
+
+    </div>
+
+    <div id="loading" class="loading">
+        Cargando temas...
+    </div>
+
+    <div id="temasGrid" class="temas-grid"></div>
+
+    <div id="noTemas" class="no-temas" style="display: none;">
+        <h3>No hay temas disponibles</h3>
+        <p>Sé el primero en crear uno</p>
+    </div>
+</div>
+
+
+<script>
+     const API_URL = 'http://localhost:8080/api';
+
+    //const API_URL = 'https://ungratifiable-unmudded-neida.ngrok-free.dev/api';
+
+    let currentPage = 0;
+    let totalPages = 1;
+    const size = 6;
+    let isLoading = false; // bandera de control
+
+    function crearTemaCard(tema) {
+        const card = document.createElement('div');
+        card.className = 'tema-card';
+        card.onclick = () => window.location.href = `ver-tema.html?id=${tema.idTema}`;
+
+        const fecha = new Date(tema.fechaCreacion).toLocaleDateString('es-ES');
+
+        let mediaUrl = tema.urlContenido?.trim()
+            ? tema.urlContenido
+            : `${API_URL}/temas/archivo/${tema.idTema}`;
+
+        let mediaContent;
+        if (tema.tipoContenido === 'VIDEO' && tema.urlContenido?.includes('youtube.com')) {
+            const videoId = extraerYouTubeId(tema.urlContenido);
+            mediaContent = `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0"
+                allowfullscreen style="width:100%;height:100%;"></iframe>`;
+        } else if (tema.tipoContenido === 'VIDEO') {
+            mediaContent = `<video src="${mediaUrl}" controls></video>`;
+        } else {
+            mediaContent = `<img src="${mediaUrl}" alt="${tema.titulo}"
+                onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22%2300ff00%22>Error</text></svg>'">`;
+        }
+
+        card.innerHTML = `
+            <div class="tema-media">${mediaContent}</div>
+            <div class="tema-content">
+                <div class="tema-title">${tema.titulo}</div>
+                <div class="tema-info">${tema.usuarioCreador || 'Anónimo'} • ${fecha}</div>
+                <div class="tema-description">${tema.descripcion}</div>
+                <div class="tema-meta">
+                    <span>${tema.totalComentarios || 0} comentarios</span>
+                    <span>${tema.tipoContenido}</span>
+                </div>
+            </div>
+        `;
+        return card;
+    }
+
+    function extraerYouTubeId(url) {
+        const regExp = /^.*(youtu.be\/|v\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
+        return match && match[2].length === 11 ? match[2] : null;
+    }
+
+    async function cargarTemas() {
+        if (currentPage >= totalPages || isLoading) return;
+        isLoading = true;
+
+        const loading = document.getElementById('loading');
+        const temasGrid = document.getElementById('temasGrid');
+        const noTemas = document.getElementById('noTemas');
+
+        loading.style.display = 'block';
+
+        try {
+            const response = await fetch(`${API_URL}/temas/listar?page=${currentPage}&size=${size}`);
+            const data = await response.json();
+
+            loading.style.display = 'none';
+            const temas = data.content;
+            totalPages = data.totalPages;
+
+            if (temas.length === 0 && currentPage === 0) {
+                noTemas.style.display = 'block';
+                isLoading = false;
+                return;
+            }
+
+            temas.forEach(tema => temasGrid.appendChild(crearTemaCard(tema)));
+
+            currentPage++; // avanzar de página
+        } catch (error) {
+            console.error('Error al cargar temas:', error);
+        } finally {
+            isLoading = false;
+        }
+    }
+
+    window.addEventListener('scroll', () => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+            cargarTemas();
+        }
+    });
+
+    // --- BUSCADOR DE TEMAS ---
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', async (e) => {
+        const query = e.target.value.trim();
+        const temasGrid = document.getElementById('temasGrid');
+        const noTemas = document.getElementById('noTemas');
+        const loading = document.getElementById('loading');
+
+        if (query === '') {
+            temasGrid.innerHTML = '';
+            currentPage = 0;
+            totalPages = 1;
+            cargarTemas();
+            return;
+        }
+
+        loading.style.display = 'block';
+        try {
+            const response = await fetch(`${API_URL}/temas/buscar?titulo=${encodeURIComponent(query)}`);
+            const temas = await response.json();
+
+            temasGrid.innerHTML = '';
+            loading.style.display = 'none';
+
+            if (temas.length === 0) {
+                noTemas.style.display = 'block';
+            } else {
+                noTemas.style.display = 'none';
+                temas.forEach(tema => temasGrid.appendChild(crearTemaCard(tema)));
+            }
+        } catch (error) {
+            console.error('Error al buscar temas:', error);
+            loading.style.display = 'none';
+        }
+    });
+
+    window.addEventListener('DOMContentLoaded', cargarTemas);
+
+    // Mostrar el nombre del usuario logueado
+    const usernameDisplay = document.getElementById('usernameDisplay');
+    const username = localStorage.getItem('username');
+    if (username) {
+        usernameDisplay.textContent = username;
+    }
+
+    // SALIR de la sesión
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        window.location.href = 'login.html';
+    }
+
+    function mostrarToast(mensaje, duracion = 3000) {
+        const toast = document.getElementById('loginToast');
+        toast.textContent = mensaje;
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, duracion);
+    }
+
+    // --- NUEVA FUNCIÓN: interceptar clic en Crear Tema ---
+    const btnCrearTema = document.getElementById('btnCrearTema');
+    btnCrearTema.addEventListener('click', (e) => {
+        const username = localStorage.getItem('username');
+        if (!username) {
+            e.preventDefault(); // evita que se abra crear-tema.html
+            mostrarToast("Necesitas logarte para crear un tema");
+        }
+    });
+
+
+        function goLogin() {
+        window.location.href = 'login.html';
+    }
+
+    // Mostrar u ocultar botones según el estado de sesión
+    document.addEventListener('DOMContentLoaded', () => {
+        const username = localStorage.getItem('username');
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        const btnLogin = document.getElementById('btnLogin');
+        const btnLogout = document.getElementById('btnLogout');
+
+        if (username) {
+            usernameDisplay.textContent = username;
+            btnLogin.style.display = 'none';
+            btnLogout.style.display = 'inline-flex';
+        } else {
+            usernameDisplay.textContent = '';
+            btnLogin.style.display = 'inline-flex';
+            btnLogout.style.display = 'none';
+        }
+    });
+
+
+</script>
+
+
+
+
+</body>
+</html>

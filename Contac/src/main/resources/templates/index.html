@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contac - Temas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(0, 255, 0, 0.05);
+            border-bottom: 2px solid #00ff00;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .logo span:first-child {
+            color: #00ff00;
+        }
+
+        .nav-search {
+            flex: 1;
+            max-width: 600px;
+            margin: 0 40px;
+            position: relative;
+        }
+
+        .nav-search input {
+            width: 100%;
+            padding: 12px 20px;
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .nav-search input::placeholder {
+            color: #666;
+        }
+
+        .nav-search input:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #00ff00;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-logout {
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .btn-new-tema {
+            padding: 12px 25px;
+            background: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-new-tema:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .header-section {
+            margin-bottom: 40px;
+        }
+
+        .header-section h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .temas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .tema-card {
+            background: rgba(0, 255, 0, 0.05);
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .tema-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 0, 0.2);
+        }
+
+        .tema-media {
+            width: 100%;
+            height: 250px;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tema-media img, .tema-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-icon {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 255, 0, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .tema-content {
+            padding: 20px;
+        }
+
+        .tema-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #00ff00;
+        }
+
+        .tema-info {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .tema-description {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #ccc;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .tema-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .no-temas {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-temas h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #00ff00;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">
+        <span>C</span><span>ontac</span>
+    </div>
+
+    <div class="nav-search">
+        <input
+                type="text"
+                id="searchInput"
+                placeholder="Busca un tema..."
+        >
+    </div>
+
+    <div class="nav-links">
+        <a href="index.html">Temas</a>
+        <a href="#">Tecnologías</a>
+        <a href="#">Funciones</a>
+    </div>
+
+    <div class="user-info">
+        <span id="usernameDisplay"></span>
+        <button class="btn-logout" onclick="logout()">Salir</button>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="header-section">
+        <h2>Temas:</h2>
+        <a href="crear-tema.html" class="btn-new-tema">+ Crear Nuevo Tema</a>
+    </div>
+
+    <div id="loading" class="loading">
+        Cargando temas...
+    </div>
+
+    <div id="temasGrid" class="temas-grid"></div>
+
+    <div id="noTemas" class="no-temas" style="display: none;">
+        <h3>No hay temas disponibles</h3>
+        <p>Sé el primero en crear uno</p>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'http://localhost:8080/api';
+    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
+
+    // Mostrar/ocultar elementos según autenticación
+    const userInfo = document.querySelector('.user-info');
+    const btnNewTema = document.querySelector('.btn-new-tema');
+
+    if (username) {
+        document.getElementById('usernameDisplay').textContent = username;
+    } else {
+        // Si no está autenticado, mostrar botón de login
+        userInfo.innerHTML = `
+            <a href="login.html" class="btn-logout">Iniciar Sesión</a>
+        `;
+        btnNewTema.onclick = (e) => {
+            e.preventDefault();
+            alert('Debes iniciar sesión para crear temas');
+            window.location.href = 'login.html';
+        };
+    }
+
+    let searchTimeout;
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const query = e.target.value.trim();
+            if (query) {
+                buscarTemas(query);
+            } else {
+                cargarTemas();
+            }
+        }, 500);
+    });
+
+    async function cargarTemas() {
+        const loading = document.getElementById('loading');
+        const temasGrid = document.getElementById('temasGrid');
+        const noTemas = document.getElementById('noTemas');
+
+        loading.style.display = 'block';
+        temasGrid.innerHTML = '';
+        noTemas.style.display = 'none';
+
+        try {
+            const response = await fetch(`${API_URL}/temas/listar`);
+            const temas = await response.json();
+
+            loading.style.display = 'none';
+
+            if (temas.length === 0) {
+                noTemas.style.display = 'block';
+                return;
+            }
+
+            temas.forEach(tema => {
+                temasGrid.appendChild(crearTemaCard(tema));
+            });
+        } catch (error) {
+            loading.style.display = 'none';
+            console.error('Error al cargar temas:', error);
+        }
+    }
+
+    async function buscarTemas(query) {
+        const loading = document.getElementById('loading');
+        const temasGrid = document.getElementById('temasGrid');
+        const noTemas = document.getElementById('noTemas');
+
+        loading.style.display = 'block';
+        temasGrid.innerHTML = '';
+        noTemas.style.display = 'none';
+
+        try {
+            const response = await fetch(`${API_URL}/temas/buscar?titulo=${encodeURIComponent(query)}`);
+            const temas = await response.json();
+
+            loading.style.display = 'none';
+
+            if (temas.length === 0) {
+                noTemas.style.display = 'block';
+                return;
+            }
+
+            temas.forEach(tema => {
+                temasGrid.appendChild(crearTemaCard(tema));
+            });
+        } catch (error) {
+            loading.style.display = 'none';
+            console.error('Error al buscar temas:', error);
+        }
+    }
+
+    function crearTemaCard(tema) {
+        const card = document.createElement('div');
+        card.className = 'tema-card';
+        card.onclick = () => window.location.href = `ver-tema.html?id=${tema.idTema}`;
+
+        const fecha = new Date(tema.fechaCreacion).toLocaleDateString('es-ES');
+        const mediaContent = tema.tipoContenido === 'VIDEO'
+            ? `<video src="${API_URL}/temas/archivo/${tema.idTema}"></video><div class="play-icon">▶</div>`
+            : `<img src="${API_URL}/temas/archivo/${tema.idTema}" alt="${tema.titulo}">`;
+
+        card.innerHTML = `
+            <div class="tema-media">
+                ${mediaContent}
+            </div>
+            <div class="tema-content">
+                <div class="tema-title">${tema.titulo}</div>
+                <div class="tema-info">${tema.usuarioCreador || 'Anónimo'} • ${fecha}</div>
+                <div class="tema-description">${tema.descripcion}</div>
+                <div class="tema-meta">
+                    <span>${tema.totalComentarios || 0} comentarios</span>
+                    <span>${tema.tipoContenido}</span>
+                </div>
+            </div>
+        `;
+
+        return card;
+    }
+
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        window.location.href = 'login.html';
+    }
+
+    cargarTemas();
+</script>
+</body>
+</html>

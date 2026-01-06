@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contac - Editar Tema</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(0, 255, 0, 0.05);
+            border-bottom: 2px solid #00ff00;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .logo span:first-child {
+            color: #00ff00;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .form-container {
+            background: rgba(0, 255, 0, 0.05);
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .form-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #00ff00;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00ff00;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #666;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 30px;
+            margin-top: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #00ff00;
+        }
+
+        .radio-option label {
+            margin: 0;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .file-input-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 15px;
+            background: #000;
+            border: 2px dashed #00ff00;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-input-label:hover {
+            background: rgba(0, 255, 0, 0.1);
+        }
+
+        .file-input-label.has-file {
+            border-style: solid;
+            background: rgba(0, 255, 0, 0.1);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            color: #00ff00;
+            font-size: 14px;
+        }
+
+        .current-content {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+        }
+
+        .current-content h4 {
+            color: #00ff00;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .current-content p {
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .preview-container {
+            margin-top: 15px;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            overflow: hidden;
+            max-height: 400px;
+            display: none;
+        }
+
+        .preview-container img,
+        .preview-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .error-message, .success-message {
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error-message {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            color: #ff6b6b;
+        }
+
+        .success-message {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+        }
+
+        .error-message.show, .success-message.show {
+            display: block;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .btn-submit:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(0, 255, 0, 0.1);
+        }
+
+        .btn-delete {
+            background: transparent;
+            border: 2px solid #ff0000;
+            color: #ff0000;
+        }
+
+        .btn-delete:hover {
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #00ff00;
+            margin-top: 15px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .content-type-section {
+            display: none;
+        }
+
+        .content-type-section.active {
+            display: block;
+        }
+
+        .info-banner {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+                /* ===== MODAL DE CONFIRMACIÓN ===== */
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 999;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.8);
+          justify-content: center;
+          align-items: center;
+        }
+
+        .modal-content {
+          background: #000;
+          border: 2px solid #00ff00;
+          border-radius: 20px;
+          padding: 30px;
+          max-width: 500px;
+          width: 90%;
+          text-align: center;
+          color: #fff;
+          box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+        }
+
+        .modal-content h3 {
+          color: #00ff00;
+          margin-bottom: 10px;
+          font-size: 22px;
+        }
+
+        .modal-content p {
+          color: #ccc;
+          margin-bottom: 25px;
+          font-size: 15px;
+        }
+
+        .modal-actions {
+          display: flex;
+          justify-content: space-around;
+          gap: 10px;
+        }
+
+
+
+    </style>
+</head>
+
+<!-- Modal de confirmación -->
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <h3>¿Estás seguro de eliminar este tema?</h3>
+        <p>Esta acción no se puede deshacer y se eliminarán también todos los comentarios asociados.</p>
+        <div class="modal-actions">
+            <button class="btn btn-cancel" onclick="cerrarModal()">Cancelar</button>
+            <button class="btn btn-delete" onclick="eliminarTema()">Eliminar</button>
+        </div>
+    </div>
+</div>
+
+
+
+<body>
+<nav class="navbar">
+    <div class="logo" onclick="window.location.href='index.html'">
+        <span>C</span><span>ontac</span>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="form-container">
+        <h2 class="form-title">Editar Tema</h2>
+
+        <div class="info-banner">
+            ℹ️ Puedes actualizar cualquier campo. Si cambias el tipo de contenido o modo, el contenido anterior será reemplazado.
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+
+        <div id="loadingTema" class="loading">Cargando datos del tema...</div>
+
+        <form id="editarTemaForm" style="display: none;">
+            <div class="form-group">
+                <label for="titulo">Título del Tema</label>
+                <input
+                        type="text"
+                        id="titulo"
+                        name="titulo"
+                        placeholder="Ingresa un título descriptivo"
+                        required
+                        maxlength="200"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea
+                        id="descripcion"
+                        name="descripcion"
+                        placeholder="Describe tu tema..."
+                        required
+                ></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de Contenido</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input
+                                type="radio"
+                                id="tipoImagen"
+                                name="tipoContenido"
+                                value="IMAGEN"
+                        >
+                        <label for="tipoImagen">Imagen</label>
+                    </div>
+                    <div class="radio-option">
+                        <input
+                                type="radio"
+                                id="tipoVideo"
+                                name="tipoContenido"
+                                value="VIDEO"
+                        >
+                        <label for="tipoVideo">Video</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>¿Cómo deseas actualizar el contenido?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input
+                                type="radio"
+                                id="modoArchivo"
+                                name="modoContenido"
+                                value="archivo"
+                        >
+                        <label for="modoArchivo">Subir Nuevo Archivo</label>
+                    </div>
+                    <div class="radio-option">
+                        <input
+                                type="radio"
+                                id="modoUrl"
+                                name="modoContenido"
+                                value="url"
+                        >
+                        <label for="modoUrl">URL</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mostrar contenido actual -->
+            <div id="currentContentInfo" class="current-content">
+                <h4>📎 Contenido Actual:</h4>
+                <p id="currentContentText"></p>
+            </div>
+
+            <div id="archivoSection" class="form-group content-type-section">
+                <label>Selecciona un Nuevo Archivo</label>
+                <div class="file-input-container">
+                    <label for="archivo" class="file-input-label" id="fileLabel">
+                        <span>📁 Haz clic para seleccionar un archivo</span>
+                    </label>
+                    <input
+                            type="file"
+                            id="archivo"
+                            name="archivo"
+                            accept="image/*,video/*"
+                    >
+                    <div id="fileName" class="file-name"></div>
+                </div>
+                <div id="previewContainer" class="preview-container"></div>
+            </div>
+
+            <div id="urlSection" class="form-group content-type-section">
+                <label for="urlContenido">URL del Contenido</label>
+                <input
+                        type="text"
+                        id="urlContenido"
+                        name="urlContenido"
+                        placeholder="https://ejemplo.com/imagen.jpg"
+                >
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-delete" onclick="confirmarEliminar()">
+                    Eliminar
+                </button>
+                <button type="button" class="btn btn-cancel" onclick="cancelar()">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn btn-submit">
+                    Guardar Cambios
+                </button>
+            </div>
+
+            <div id="loading" class="loading">
+                Guardando cambios...
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+
+    const API_URL = 'http://localhost:8080/api';
+
+    //const API_URL = 'https://ungratifiable-unmudded-neida.ngrok-free.dev/api';
+
+
+    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
+
+    if (!token) {
+        alert('Debes iniciar sesión para editar un tema');
+        window.location.href = 'login.html';
+    }
+
+    // Obtener ID del tema de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const temaId = urlParams.get('id');
+
+    if (!temaId) {
+        alert('ID de tema no válido');
+        window.location.href = 'index.html';
+    }
+
+    let temaActual = null;
+
+    const modoArchivoRadio = document.getElementById('modoArchivo');
+    const modoUrlRadio = document.getElementById('modoUrl');
+    const archivoSection = document.getElementById('archivoSection');
+    const urlSection = document.getElementById('urlSection');
+    const archivoInput = document.getElementById('archivo');
+    const fileLabel = document.getElementById('fileLabel');
+    const fileName = document.getElementById('fileName');
+    const previewContainer = document.getElementById('previewContainer');
+
+    // Cargar datos del tema
+    async function cargarTema() {
+        const loadingTema = document.getElementById('loadingTema');
+        const editarTemaForm = document.getElementById('editarTemaForm');
+        const errorMessage = document.getElementById('errorMessage');
+
+        try {
+            const response = await fetch(`${API_URL}/temas/ver/${temaId}`);
+            const tema = await response.json();
+
+            if (!response.ok) {
+                throw new Error('Error al cargar el tema');
+            }
+
+            // Verificar que el usuario sea el creador
+            if (tema.usuarioCreador !== username) {
+                alert('No tienes permisos para editar este tema');
+                window.location.href = `ver-tema.html?id=${temaId}`;
+                return;
+            }
+
+            temaActual = tema;
+
+            // Llenar formulario con datos actuales
+            document.getElementById('titulo').value = tema.titulo;
+            document.getElementById('descripcion').value = tema.descripcion;
+
+            // Seleccionar tipo de contenido
+            if (tema.tipoContenido === 'IMAGEN') {
+                document.getElementById('tipoImagen').checked = true;
+            } else {
+                document.getElementById('tipoVideo').checked = true;
+            }
+
+            // Determinar modo actual (URL o archivo)
+            if (tema.urlContenido && tema.urlContenido.trim() !== '') {
+                document.getElementById('modoUrl').checked = true;
+                document.getElementById('urlContenido').value = tema.urlContenido;
+                urlSection.classList.add('active');
+                document.getElementById('currentContentText').textContent = `URL: ${tema.urlContenido}`;
+            } else {
+                document.getElementById('modoArchivo').checked = true;
+                archivoSection.classList.add('active');
+                document.getElementById('currentContentText').textContent = `Archivo: ${tema.nombreArchivo || 'Sin nombre'}`;
+            }
+
+            loadingTema.style.display = 'none';
+            editarTemaForm.style.display = 'block';
+
+        } catch (error) {
+            console.error('Error:', error);
+            errorMessage.textContent = 'Error al cargar el tema. Redirigiendo...';
+            errorMessage.classList.add('show');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        }
+    }
+
+    // Event listeners para cambiar modo
+    modoArchivoRadio.addEventListener('change', () => {
+        archivoSection.classList.add('active');
+        urlSection.classList.remove('active');
+    });
+
+    modoUrlRadio.addEventListener('change', () => {
+        archivoSection.classList.remove('active');
+        urlSection.classList.add('active');
+    });
+
+    // Preview de archivo
+    archivoInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            fileLabel.classList.add('has-file');
+            fileName.textContent = `Archivo seleccionado: ${file.name}`;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const tipoContenido = document.querySelector('input[name="tipoContenido"]:checked').value;
+                previewContainer.style.display = 'block';
+
+                if (tipoContenido === 'IMAGEN') {
+                    previewContainer.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                } else {
+                    previewContainer.innerHTML = `<video src="${e.target.result}" controls></video>`;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Submit del formulario
+    document.getElementById('editarTemaForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const loading = document.getElementById('loading');
+
+        errorMessage.classList.remove('show');
+        successMessage.classList.remove('show');
+        loading.classList.add('show');
+
+        const titulo = document.getElementById('titulo').value;
+        const descripcion = document.getElementById('descripcion').value;
+        const tipoContenido = document.querySelector('input[name="tipoContenido"]:checked').value;
+        const modoContenido = document.querySelector('input[name="modoContenido"]:checked').value;
+
+        try {
+            let response;
+
+            if (modoContenido === 'archivo') {
+                const formData = new FormData();
+                formData.append('titulo', titulo);
+                formData.append('descripcion', descripcion);
+                formData.append('tipoContenido', tipoContenido);
+
+                const archivoFile = archivoInput.files[0];
+                if (archivoFile) {
+                    formData.append('archivo', archivoFile);
+                } else {
+                    throw new Error('Debes seleccionar un archivo');
+                }
+
+                response = await fetch(`${API_URL}/temas/archivo/${temaId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+            } else {
+                const urlContenido = document.getElementById('urlContenido').value;
+
+                if (!urlContenido || urlContenido.trim() === '') {
+                    throw new Error('Debes proporcionar una URL');
+                }
+
+                response = await fetch(`${API_URL}/temas/url/${temaId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ titulo, descripcion, tipoContenido, urlContenido })
+                });
+            }
+
+            const data = await response.json();
+
+            if (response.ok) {
+                successMessage.textContent = 'Tema actualizado exitosamente. Redirigiendo...';
+                successMessage.classList.add('show');
+                setTimeout(() => {
+                    window.location.href = `ver-tema.html?id=${temaId}`;
+                }, 1500);
+            } else {
+                throw new Error(data.mensaje || data.error || 'Error al actualizar el tema');
+            }
+        } catch (error) {
+            errorMessage.textContent = error.message;
+            errorMessage.classList.add('show');
+        } finally {
+            loading.classList.remove('show');
+        }
+    });
+
+    function cancelar() {
+        if (confirm('¿Estás seguro de cancelar? Los cambios no se guardarán.')) {
+            window.location.href = `ver-tema.html?id=${temaId}`;
+        }
+    }
+
+    function confirmarEliminar() {
+      const modal = document.getElementById('confirmModal');
+      modal.style.display = 'flex';
+    }
+
+    function cerrarModal() {
+      const modal = document.getElementById('confirmModal');
+      modal.style.display = 'none';
+    }
+
+    async function eliminarTema() {
+      cerrarModal();
+
+      const loading = document.getElementById('loading');
+      const errorMessage = document.getElementById('errorMessage');
+      const successMessage = document.getElementById('successMessage');
+
+      loading.classList.add('show');
+
+      try {
+        const response = await fetch(`${API_URL}/temas/${temaId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          successMessage.textContent = 'Tema eliminado exitosamente. Redirigiendo...';
+          successMessage.classList.add('show');
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1500);
+        } else {
+          const data = await response.json();
+          throw new Error(data.mensaje || data.error || 'Error al eliminar el tema');
+        }
+      } catch (error) {
+        errorMessage.textContent = error.message;
+        errorMessage.classList.add('show');
+      } finally {
+        loading.classList.remove('show');
+      }
+    }
+
+
+    // Cargar tema al iniciar
+    cargarTema();
+</script>
+</body>
+</html>
