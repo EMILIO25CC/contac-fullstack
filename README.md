@@ -191,10 +191,6 @@ Content-Type: application/json
    - Listar temas
    - Crear comentario
 
-### Tests unitarios
-```bash
-mvn test
-```
 
 ## 📝 Notas importantes
 
@@ -211,32 +207,12 @@ Verifica que el token JWT esté correctamente formateado en el header `Authoriza
 ### Error: "Conexión rechazada"
 Asegúrate de que la base de datos esté corriendo y las credenciales sean correctas
 
-## Contribuciones
 
-Las contribuciones son bienvenidas. Por favor:
-1. Fork el proyecto
-2. Crea una rama (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit tus cambios (`git commit -m 'Agrega nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Abre un Pull Request
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
 
 ## 👤 Autor
 
 **Emilio**
 - GitHub: [@EMILIO25CC](https://github.com/EMILIO25CC)
-- LinkedIn: [Tu LinkedIn] (opcional)
-- Email: [Tu email] (opcional)
+- LinkedIn: [https://www.linkedin.com/in/carlos-emilio-cabrera-casta%C3%B1eda-1b8abb34a/]
 
-## 🙏 Agradecimientos
 
-- Spring Boot Team
-- Bootstrap
-- Comunidad de desarrolladores
-
----
-
-⭐ Si este proyecto te fue útil, considera darle una estrella en GitHub
